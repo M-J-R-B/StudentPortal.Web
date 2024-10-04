@@ -171,12 +171,13 @@
                     <div class="card-body">
                         <form asp-action="Register">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                            @if (ViewBag.Message != null)
+
+                            @if (!string.IsNullOrEmpty(ViewBag.Message))
                             {
-                                <div class="alert alert-danger" role="alert">
-                                    @ViewBag.Message
-                                </div>
+                                <div class="alert @(ViewBag.Message.Contains("successfully") ? "alert-success" : "alert-danger")" role="alert"> @ViewBag.Message </div>
                             }
+
+                            
                             <div class="mb-4">
                                 <label for="username" class="form-label">Username</label>
                                 <input type="text" class="form-control" id="username" placeholder="Choose a username" asp-for="Username" required>

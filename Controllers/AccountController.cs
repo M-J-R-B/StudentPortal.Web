@@ -80,38 +80,44 @@ namespace StudentPortal.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Check if username already exists
+                if (dbContext.UserAccounts.Any(u => u.Username == model.Username))
+                {
+                    ViewBag.Message = "Username already exists.";
+                    return View(model);
+                }
+
                 UserAccount user = new UserAccount
                 {
                     Username = model.Username,
-                    Password = model.Password
+                    Password = model.Password // Note: Ensure you're hashing this password!
                 };
-                //test
+
                 try
                 {
                     dbContext.UserAccounts.Add(user);
                     dbContext.SaveChanges();
-                    ModelState.Clear();
                     ViewBag.Message = $"{model.Username} successfully registered.";
                     return View();
-                }
-                catch (DbUpdateException ex)
-                {
-                    // This will catch unique constraint violations
-                    ModelState.AddModelError("", "Username already exists.");
-
                 }
                 catch (Exception ex)
                 {
                     // This will catch any other unexpected errors
-                    ModelState.AddModelError("", "An error occurred while registering. Please try again.");
+                    ViewBag.Message = "An error occurred while registering. Please try again.";
                     // Log the exception here for debugging purposes
                     // logger.LogError(ex, "Error occurred while registering user");
                 }
             }
+            else
+            {
+                // If ModelState is invalid, we need to ensure we're not showing a success message
+                ViewBag.Message = null;
+            }
 
-            // If we get here, either ModelState was invalid or an exception was caught
             return View(model);
+           
         }
+        
     }
 }
 
