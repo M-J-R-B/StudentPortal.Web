@@ -41,7 +41,9 @@ namespace StudentPortal.Web.Controllers
 
             await dbContext.SaveChangesAsync();
 
-            return View();
+            TempData["SuccessMessage"] = "Student has been added successfully.";
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -82,6 +84,7 @@ namespace StudentPortal.Web.Controllers
 
                 await dbContext.SaveChangesAsync();
             }
+            TempData["SuccessMessage"] = "Student has been updated successfully.";
             return RedirectToAction("Index", "Home");
         }
 
@@ -108,8 +111,9 @@ namespace StudentPortal.Web.Controllers
 				dbContext.Students.Remove(student);
 				await dbContext.SaveChangesAsync();
 			}
+            TempData["SuccessMessage"] = "Student has been deleted successfully.";
 
-			return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home");
 		}
     }
 

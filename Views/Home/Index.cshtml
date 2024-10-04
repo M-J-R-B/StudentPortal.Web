@@ -86,6 +86,14 @@
         </div>
 
         @model List<StudentPortal.Web.Models.Entities.Student>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
         <table class="table table-striped">
             <thead>
                 <tr>
