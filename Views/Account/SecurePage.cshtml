@@ -1,2 +1,96 @@
-﻿
+﻿@* 
  <h4>Hello @ViewBag.Name</h4>
+ *@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Page</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Lato', sans-serif;
+            color: #333;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 0;
+            padding: 60px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .lead {
+            font-weight: 300;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            border-radius: 0;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 12px 30px;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+            .btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            }
+
+        .btn-primary {
+            background-color: #2c3e50;
+            border-color: #2c3e50;
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            border-color: #95a5a6;
+        }
+
+        .btn-info {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+
+        .elegant-divider {
+            width: 50px;
+            height: 2px;
+            background-color: #2c3e50;
+            margin: 30px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h1 class="display-4">Welcome @ViewBag.Name!</h1>
+                <div class="elegant-divider"></div>
+                <p class="lead">Experience refinement in every detail. Choose your journey below.</p>
+                <div class="d-grid gap-3 d-md-block">
+                    <a class="btn btn-primary" type="button" asp-controller="Students" asp-action="Add">Student</a>
+                    <button class="btn btn-secondary" type="button">Subject Entry</button>
+                    <button class="btn btn-info" type="button">Subject Schedule</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
