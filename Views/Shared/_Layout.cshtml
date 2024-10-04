@@ -1,72 +1,19 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
+    
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Student Portal</title>
+    <title>@ViewData["Title"] - StudentPortal.Web</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/StudentPortal.Web.styles.css" asp-append-version="true" />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Lato', sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
-        }
-
-        .navbar {
-            background-color: #2c3e50;
-            padding: 15px 0;
-        }
-
-        .navbar-brand {
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-            color: #ecf0f1 !important;
-            font-size: 1.5rem;
-        }
-
-        .navbar-nav .nav-link {
-            color: #ecf0f1 !important;
-            font-weight: 400;
-            transition: all 0.3s ease;
-        }
-
-            .navbar-nav .nav-link:hover {
-                color: #3498db !important;
-            }
-
-        .navbar-toggler {
-            border-color: #ecf0f1;
-        }
-
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(236, 240, 241, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-        }
-
-        main {
-            min-height: calc(100vh - 180px);
-            padding-top: 30px;
-            padding-bottom: 30px;
-        }
-
-        footer {
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            padding: 20px 0;
-        }
-
-            footer a {
-                color: #3498db;
-            }
-    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark box-shadow mb-3">
+        
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Student Portal</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -76,13 +23,19 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="SecurePage">Menu</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">All Students</a>
+                        </li>
+                        @* <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="Add">Add Student</a>
+                        </li> *@
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="SecurePage">Menu</a>
                         </li>
                     </ul>
                     @await Html.PartialAsync("LoginPartial")
@@ -95,9 +48,10 @@
             @RenderBody()
         </main>
     </div>
-   @*  <footer class="footer text-muted">
-        <div class="container text-center">
-            &copy; @DateTime.Now.Year - Student Portal - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+    @* <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - StudentPortal.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer> *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
