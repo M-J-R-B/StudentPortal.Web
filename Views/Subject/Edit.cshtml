@@ -1,0 +1,292 @@
+﻿@model StudentPortal.Web.Models.SubjectViewModel
+
+@{
+    ViewData["Title"] = "Edit Subject";
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Subject</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Lato', sans-serif;
+            color: #333;
+        }
+
+        .container {
+            margin-top: 40px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: #2c3e50;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #7f8c8d;
+        }
+
+        .form-control, .form-select {
+            border-radius: 0;
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+        }
+
+            .form-control:focus, .form-select:focus {
+                border-color: #2c3e50;
+                box-shadow: none;
+            }
+
+        .btn {
+            border: none;
+            border-radius: 0;
+            padding: 12px 25px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #2c3e50;
+        }
+
+            .btn-primary:hover {
+                background-color: #34495e;
+            }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+        }
+
+            .btn-secondary:hover {
+                background-color: #7f8c8d;
+            }
+
+        .alert {
+            border-radius: 5px;
+        }
+
+        .input-group-text {
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 0;
+        }
+
+        .requisite-section {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2><i class="fas fa-book-open me-3"></i>Edit Subject</h2>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="mb-4">
+                <label asp-for="Subj_Code" class="form-label"></label>
+                <input asp-for="Subj_Code" class="form-control" />
+                <span asp-validation-for="Subj_Code" class="text-danger"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="SubjectDescription" class="form-label"></label>
+                <input asp-for="SubjectDescription" class="form-control" />
+                <span asp-validation-for="SubjectDescription" class="text-danger"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Units" class="form-label"></label>
+                <input asp-for="Units" class="form-control" />
+                <span asp-validation-for="Units" class="text-danger"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Offering" class="form-label"></label>
+                <select asp-for="Offering" class="form-select">
+                    <option value="">Select an Offering</option>
+                    <option value="1">1st Semester</option>
+                    <option value="2">2nd Semester</option>
+                </select>
+                <span asp-validation-for="Offering" class="text-danger"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Category" class="form-label"></label>
+                <select asp-for="Category" class="form-select">
+                    <option value="">Select a Category</option>
+                    <option value="lecture">Lecture</option>
+                    <option value="laboratory">Laboratory</option>
+                </select>
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Course_Code" class="form-label"></label>
+                <select asp-for="Course_Code" class="form-select">
+                    <option value="">Select a Course</option>
+                    <option value="BSIT">BSIT</option>
+                    <option value="BSIS">BSIS</option>
+                    <option value="BSCS">BSCS</option>
+                    <option value="BSBA">BSBA</option>
+                    <option value="BSMT">BSMT</option>
+                    <option value="BSED">BSED</option>
+                    <option value="BEED">BEED</option>
+                </select>
+                <span asp-validation-for="Course_Code" class="text-danger"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="CurriculumYear" class="form-label"></label>
+                <input asp-for="CurriculumYear" type="number" class="form-control" min="2000" max="2099" step="1" placeholder="Enter Year" />
+                <span asp-validation-for="CurriculumYear" class="text-danger"></span>
+            </div>
+
+            <!-- Form for Adding Subject Requisites -->
+            <div class="requisite-section">
+                <h3><i class="fas fa-link me-3"></i>Edit Subject Requisite</h3>
+                <div class="mb-4">
+                    <label>Search by Subject Code:</label>
+                    <div class="input-group">
+                        <input type="text" id="subjCodeSearch" class="form-control" placeholder="Enter Subject Code" />
+                        <button type="button" id="searchButton" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label>Selected Requisite:</label>
+                    <span id="selectedRequisite" class="text-success">@Model.SubjectRequisite</span>
+                </div>
+
+                <!-- Table to Display Search Results -->
+                <table class="table table-bordered" id="subjectTable">
+                    <thead>
+                        <tr>
+                            <th>Select</th>
+                            <th>Subj Code</th>
+                            <th>Subject Description</th>
+                            <th>Requisite Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Results will be populated here -->
+                    </tbody>
+                </table>
+
+                <!-- Hidden inputs to hold selected requisite data -->
+                <input type="hidden" name="SubjectRequisite" id="SubjectRequisite" value="@Model.SubjectRequisite" />
+                <input type="hidden" name="IsPreRequisite" id="IsPreRequisite" value="false" />
+            </div>
+
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="List" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+
+    @section Scripts {
+        @await Html.PartialAsync("_ValidationScriptsPartial")
+
+        <script>
+            let selectedRequisite = '@Model.SubjectRequisite'; // Initialize with existing requisite
+
+            // Function to update table with new requisite type
+            function updateTableWithRequisiteType(data) {
+                const tableBody = document.getElementById('subjectTable').getElementsByTagName('tbody')[0];
+                tableBody.innerHTML = ''; // Clear existing results
+
+                if (!data || data.length === 0) {
+                    alert('No subjects found.');
+                    return;
+                }
+
+                data.forEach(subject => {
+                    const row = tableBody.insertRow();
+
+                    // Create a cell for the radio button
+                    const selectCell = row.insertCell(0);
+                    const radioButton = document.createElement('input');
+                    radioButton.type = 'radio';
+                    radioButton.name = 'selectedRequisite'; // Name for the radio group
+                    radioButton.value = subject.subj_Code; // Value of the radio button
+                    radioButton.checked = subject.subj_Code === selectedRequisite; // Check if it's the selected requisite
+                    radioButton.onclick = function () {
+                        selectedRequisite = subject.subj_Code; // Set selected requisite
+                        document.getElementById('selectedRequisite').innerText = selectedRequisite; // Update displayed requisite
+
+                        // Set hidden fields for form submission
+                        document.getElementById('SubjectRequisite').value = selectedRequisite; // Update hidden field
+                        document.getElementById('IsPreRequisite').value = true; // Set to true for prerequisite
+                    };
+                    selectCell.appendChild(radioButton);
+
+                    row.insertCell(1).innerText = subject.subj_Code;
+                    row.insertCell(2).innerText = subject.subjectDescription;
+                    row.insertCell(3).innerText = "Pre-Requisite"; // Display as Pre-Requisite
+                });
+            }
+
+            document.getElementById('searchButton').onclick = function () {
+                const searchValue = document.getElementById('subjCodeSearch').value;
+
+                // Make an AJAX call to search for subjects
+                fetch('/Subject/Search?subjCode=' + encodeURIComponent(searchValue))
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Call the function to update the table
+                        updateTableWithRequisiteType(data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            };
+        </script>
+    }
+</body>
+</html>

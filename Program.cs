@@ -30,6 +30,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
+    name: "schedule",
+    pattern: "Schedule/{action=List}/{id?}",
+    defaults: new { controller = "Schedule" });
+
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
 
