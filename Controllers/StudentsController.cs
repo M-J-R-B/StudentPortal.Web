@@ -115,6 +115,53 @@ namespace StudentPortal.Web.Controllers
 
             return RedirectToAction("Index", "Home");
 		}
+
+        [HttpGet]
+        public IActionResult SubjectEnrollment()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetStudentDetails(int id)
+        {
+            var student = await dbContext.Students
+                .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (student == null)
+                return Json(new { success = false, message = "Student not found." });
+
+            return Json(new
+            {
+                success = true,
+                data = new
+                {
+                    name = $"{student.FirstName} {student.LastName}",
+                    course = student.Course,
+                    year = student.Year
+                }
+            });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSubjectSchedule(string edpCode)
+        {
+            var schedule = await dbContext.Schedules
+                .Include(s => s.Subject)
+                .FirstOrDefaultAsync(s => s.EdpCode == edpCode);
+
+            if (schedule == null)
+                return Json(new { success = false, message = "Schedule not found." });
+
+            return Json(new { success = true, data = schedule });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EnrollSubject(SubjectEnrollmentViewModel model)
+        {
+            // Enrollment logic here
+            return Json(new { success = true });
+        }
     }
 
 }

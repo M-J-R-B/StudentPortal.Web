@@ -5,9 +5,9 @@ namespace StudentPortal.Web.Models.Entities
 {
     public class Subject
     {
-        [Key]
+        
         public int Id { get; set; }
-
+        [Key]
         public string Subj_Code { get; set; } = string.Empty;
 
         public string SubjectDescription { get; set; } = string.Empty;

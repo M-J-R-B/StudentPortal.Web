@@ -50,9 +50,11 @@ namespace StudentPortal.Web.Migrations
 
                     b.Property<string>("SubjCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("EdpCode");
+
+                    b.HasIndex("SubjCode");
 
                     b.ToTable("Schedules");
                 });
@@ -91,11 +93,8 @@ namespace StudentPortal.Web.Migrations
 
             modelBuilder.Entity("StudentPortal.Web.Models.Entities.Subject", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Subj_Code")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Category")
                         .IsRequired()
@@ -108,14 +107,13 @@ namespace StudentPortal.Web.Migrations
                     b.Property<int>("CurriculumYear")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsPreRequisite")
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsPreRequisite")
                         .HasColumnType("bit");
 
                     b.Property<string>("Offering")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Subj_Code")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -124,15 +122,48 @@ namespace StudentPortal.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SubjectRequisite")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Units")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("Subj_Code");
 
                     b.ToTable("Subjects");
+                });
+
+            modelBuilder.Entity("StudentPortal.Web.Models.Entities.SubjectEnrollment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("EdpCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EncodedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EncodedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ScheduleEdpCode")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ScheduleEdpCode");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("SubjectEnrollments");
                 });
 
             modelBuilder.Entity("StudentPortal.Web.Models.Entities.UserAccount", b =>
@@ -171,6 +202,34 @@ namespace StudentPortal.Web.Migrations
                             Password = "password2",
                             Username = "user2"
                         });
+                });
+
+            modelBuilder.Entity("StudentPortal.Web.Models.Entities.Schedule", b =>
+                {
+                    b.HasOne("StudentPortal.Web.Models.Entities.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("StudentPortal.Web.Models.Entities.SubjectEnrollment", b =>
+                {
+                    b.HasOne("StudentPortal.Web.Models.Entities.Schedule", "Schedule")
+                        .WithMany()
+                        .HasForeignKey("ScheduleEdpCode");
+
+                    b.HasOne("StudentPortal.Web.Models.Entities.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Schedule");
+
+                    b.Navigation("Student");
                 });
 #pragma warning restore 612, 618
         }

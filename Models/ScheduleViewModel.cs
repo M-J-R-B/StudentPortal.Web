@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using StudentPortal.Web.Models.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace StudentPortal.Web.Models
@@ -31,6 +32,8 @@ namespace StudentPortal.Web.Models
         [Required]
         [Display(Name = "School Year")]
         public string SchoolYear { get; set; }
+
+        public virtual Subject Subject { get; set; }
     }
 }
 

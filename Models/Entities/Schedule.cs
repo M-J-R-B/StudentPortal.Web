@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace StudentPortal.Web.Models.Entities
 {
@@ -9,6 +11,8 @@ namespace StudentPortal.Web.Models.Entities
         [Key]
         [Display(Name = "EDP Code")]
         public string EdpCode { get; set; }
+
+        [ForeignKey("Subject")]
 
         [Required]
         [Display(Name = "Subject Code")]
@@ -31,6 +35,8 @@ namespace StudentPortal.Web.Models.Entities
         [Required]
         [Display(Name = "School Year")]
         public string SchoolYear { get; set; }
+        public virtual Subject Subject { get; set; }
+
 
     }
 }

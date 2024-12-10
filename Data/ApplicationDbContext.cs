@@ -19,6 +19,8 @@ namespace StudentPortal.Web.Data
 
         public DbSet<Subject> Subjects { get; set; }
 
+        public DbSet<SubjectEnrollment> SubjectEnrollments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserAccount>().HasData(

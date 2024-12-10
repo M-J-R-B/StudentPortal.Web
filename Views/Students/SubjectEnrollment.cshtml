@@ -1,0 +1,252 @@
+﻿@{
+    ViewData["Title"] = "Subject Enrollment";
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject Enrollment</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Lato', sans-serif;
+            color: #333;
+        }
+
+        .container {
+            margin-top: 40px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: #2c3e50;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #7f8c8d;
+        }
+
+        .form-control {
+            border-radius: 0;
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+        }
+
+        .table thead th {
+            background-color: #2c3e50;
+            color: #fff;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background-color: #2c3e50;
+            border: none;
+            border-radius: 0;
+            padding: 12px 25px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2><i class="fa-solid fa-graduation-cap me-3"></i>Subject Enrollment Entry</h2>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        <form>
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <label class="form-label">ID Number</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                        <input type="text" id="studentId" class="form-control" required />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <input type="text" id="studentName" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Course</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-book"></i></span>
+                        <input type="text" id="course" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Year</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                        <input type="text" id="year" class="form-control" readonly />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label class="form-label">EDP Code</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-code"></i></span>
+                        <input type="text" id="edpCode" class="form-control" />
+                        <button type="button" id="addSubject" class="btn btn-primary">Add Subject</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>EDP Code</th>
+                            <th>Subject Code</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Room</th>
+                            <th>Section</th>
+                            <th>Units</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="subjectsTable">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <label class="form-label">Encoded by:</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user-edit"></i></span>
+                        <input type="text" class="form-control" value="@User.Identity.Name" readonly />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Date:</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                        <input type="text" class="form-control" value="@DateTime.Now.ToString("dddd     MMM     dd yyyy")" readonly />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Total Units:</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-calculator"></i></span>
+                        <input type="text" id="totalUnits" class="form-control" value="0" readonly />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    @section Scripts {
+        <script>
+            $(document).ready(function () {
+                let totalUnits = 0;
+
+                // When student ID is entered
+                $('#studentId').change(function () {
+                    let id = $(this).val();
+                    $.get('/Students/GetStudentDetails', { id: id })
+                        .done(function (response) {
+                            if (response.success) {
+                                $('#studentName').val(response.data.name);
+                                $('#course').val(response.data.course);
+                                $('#year').val(response.data.year);
+                            }
+                        })
+                        .fail(function () {
+                            alert('Student not found');
+                        });
+                });
+
+                // When Add Subject button is clicked
+                $('#addSubject').click(function () {
+                    let edpCode = $('#edpCode').val();
+                    if (!edpCode) return;
+
+                    $.get('/Students/GetSubjectSchedule', { edpCode: edpCode })
+                        .done(function (response) {
+                            if (response.success) {
+                                addSubjectToTable(response.data);
+                                $('#edpCode').val('');
+                            }
+                        })
+                        .fail(function () {
+                            alert('Schedule not found');
+                        });
+                });
+
+                // Add subject to table
+                function addSubjectToTable(schedule) {
+                    let row = `
+                                    <tr>
+                                        <td>${schedule.edpCode}</td>
+                                        <td>${schedule.subjCode} - ${schedule.subject.subjectDescription}</td>
+                                        <td>${formatTime(schedule.startTime)}</td>
+                                        <td>${formatTime(schedule.endTime)}</td>
+                                        <td>${schedule.room}</td>
+                                        <td>${schedule.section}</td>
+                                        <td>${schedule.subject.units}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm remove-subject">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>`;
+                    $('#subjectsTable').append(row);
+                    updateTotalUnits(schedule.subject.units);
+                }
+
+                // Remove subject
+                $(document).on('click', '.remove-subject', function () {
+                    let units = parseInt($(this).closest('tr').find('td:eq(6)').text());
+                    updateTotalUnits(-units);
+                    $(this).closest('tr').remove();
+                });
+
+                // Update total units
+                function updateTotalUnits(units) {
+                    totalUnits += units;
+                    $('#totalUnits').val(totalUnits);
+                }
+
+                // Format time from TimeSpan to readable format
+                function formatTime(timeString) {
+                    return new Date('2000-01-01T' + timeString).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                }
+            });
+        </script>
+    }
+</body>
+</html>
