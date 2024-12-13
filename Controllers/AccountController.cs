@@ -80,33 +80,51 @@ namespace StudentPortal.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Check if username already exists
-                if (dbContext.UserAccounts.Any(u => u.Username == model.Username))
+                if (string.IsNullOrWhiteSpace(model.Username) ||
+        string.IsNullOrWhiteSpace(model.Password) ||
+        string.IsNullOrWhiteSpace(model.ConfirmPassword))
                 {
-                    ViewBag.Message = "Username already exists.";
+                    ModelState.AddModelError("", "All fields are required");
                     return View(model);
                 }
 
-                UserAccount user = new UserAccount
+                if (ModelState.IsValid)
                 {
-                    Username = model.Username,
-                    Password = model.Password // Note: Ensure you're hashing this password!
-                };
+                    // Check if passwords match
+                    if (model.Password != model.ConfirmPassword)
+                    {
+                        ModelState.AddModelError("ConfirmPassword", "Passwords do not match.");
+                        return View(model);
+                    }
 
-                try
-                {
-                    dbContext.UserAccounts.Add(user);
-                    dbContext.SaveChanges();
-                    ViewBag.Message = $"{model.Username} successfully registered.";
-                    return View();
+                    // Check if username already exists
+                    if (dbContext.UserAccounts.Any(u => u.Username == model.Username))
+                    {
+                        ViewBag.Message = "Username already exists.";
+                        return View(model);
+                    }
+
+                    UserAccount user = new UserAccount
+                    {
+                        Username = model.Username,
+                        Password = model.Password // Note: Ensure you're hashing this password!
+                    };
+
+                    try
+                    {
+                        dbContext.UserAccounts.Add(user);
+                        dbContext.SaveChanges();
+                        ViewBag.Message = $"{model.Username} successfully registered.";
+                        return View();
+                    }
+                    catch (Exception ex)
+                    {
+                        ViewBag.Message = "An error occurred while registering. Please try again.";
+                    }
                 }
-                catch (Exception ex)
-                {
-                    // This will catch any other unexpected errors
-                    ViewBag.Message = "An error occurred while registering. Please try again.";
-                    // Log the exception here for debugging purposes
-                    // logger.LogError(ex, "Error occurred while registering user");
-                }
+
+                // If we got this far, something failed, redisplay form
+                return View(model);
             }
             else
             {
