@@ -13,8 +13,10 @@ namespace StudentPortal.Web.Models.Entities
             public string EncodedBy { get; set; }
             public DateTime EncodedDate { get; set; }
 
-            // Navigation properties matching project pattern
-            public virtual Student Student { get; set; }
+        public DateTime EnrollmentDate { get; set; }
+
+        // Navigation properties matching project pattern
+        public virtual Student Student { get; set; }
             public virtual Schedule Schedule { get; set; }
         
     }

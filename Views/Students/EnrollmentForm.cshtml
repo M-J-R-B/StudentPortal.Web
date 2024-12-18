@@ -1,0 +1,126 @@
+﻿@model SubjectEnrollmentViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enrollment Form</title>
+    <style type="text/css">
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .student-info {
+            margin-bottom: 20px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+            .table th, .table td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+
+        .footer {
+            margin-top: 50px;
+        }
+
+        .signature-line {
+            margin-top: 30px;
+            border-top: 1px solid #000;
+            width: 200px;
+            text-align: center;
+        }
+
+        }
+
+        <style type="text/css" media="print" >
+        .no-print {
+            display: none;
+        }
+    </style>
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>Student Enrollment Form</h2>
+        <p>Academic Year: @DateTime.Now.Year - @(DateTime.Now.Year + 1)</p>
+    </div>
+
+    <div class="student-info">
+        <p><strong>Student ID:</strong> @Model.StudentId</p>
+        <p><strong>Name:</strong> @Model.StudentName</p>
+        <p><strong>Course:</strong> @Model.Course</p>
+        <p><strong>Year Level:</strong> @Model.Year</p>
+        <p><strong>Date Enrolled:</strong> @Model.EnrollmentDate.ToString("MMMM dd, yyyy")</p>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>EDP Code</th>
+                <th>Subject Code</th>
+                <th>Description</th>
+                <th>Units</th>
+                <th>Schedule</th>
+                <th>Room</th>
+                <th>Section</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var subject in Model.EnrolledSubjects)
+            {
+                <tr>
+                    <td>@subject.EdpCode</td>
+                    <td>@subject.SubjectCode</td>
+                    <td>@subject.Description</td>
+                    <td>@subject.Units</td>
+                    <td>@subject.StartTime - @subject.EndTime</td>
+                    <td>@subject.Room</td>
+                    <td>@subject.Section</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" style="text-align: right;"><strong>Total Units:</strong></td>
+                <td>@Model.TotalUnits</td>
+                <td colspan="3"></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="footer">
+        <div style="float: left; width: 50%;">
+            <div class="signature-line">
+                Student Signature
+            </div>
+        </div>
+        <div style="float: right; width: 50%;">
+            <div class="signature-line">
+                Registrar
+            </div>
+        </div>
+    </div>
+
+    <div class="no-print" style="margin-top: 20px; text-align: center;">
+        <button onclick="window.print()">Print Form</button>
+        <button onclick="window.close()">Close</button>
+    </div>
+
+
+
+</body>
+
+</html>

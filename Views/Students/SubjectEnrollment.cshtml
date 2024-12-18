@@ -162,14 +162,24 @@
                         <input type="text" id="totalUnits" class="form-control" value="0" readonly />
                     </div>
                 </div>
+                <div class="col-md-12 text-center mt-4">
+                    <button type="button" id="saveEnrollment" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Save Enrollment
+                    </button>
+                </div>
             </div>
         </form>
+        <div id="enrollmentFormContainer" style="display: none;">
+            <!-- Enrollment form content will be loaded here -->
+        </div>
     </div>
 
     @section Scripts {
         <script>
             $(document).ready(function () {
                 let totalUnits = 0;
+
+
 
                 // When student ID is entered
                 $('#studentId').change(function () {
@@ -202,6 +212,68 @@
                         .fail(function () {
                             alert('Schedule not found');
                         });
+                });
+
+                // Add Save Enrollment button click handler
+                // Add Save button click handler
+                $('#saveEnrollment').click(function () {
+                    const studentId = parseInt($('#studentId').val());
+                    if (!studentId) {
+                        alert('Please select a student first');
+                        return;
+                    }
+
+                    let enrolledSubjects = [];
+                    $('#subjectsTable tr').each(function () {
+                        let subject = {
+                            edpCode: $(this).find('td:eq(0)').text().trim(),
+                            subjectCode: $(this).find('td:eq(1)').text().split('-')[0].trim()
+                        };
+                        enrolledSubjects.push(subject);
+                    });
+
+                    if (enrolledSubjects.length === 0) {
+                        alert('Please add at least one subject');
+                        return;
+                    }
+
+                    const enrollmentData = {
+                        studentId: studentId,
+                        encodedBy: $('#encodedBy').val() || '@User.Identity.Name',
+                        enrollmentDate: new Date().toISOString(),
+                        enrolledSubjects: enrolledSubjects
+                    };
+
+                    console.log('Sending data:', enrollmentData); // For debugging
+
+                    $.ajax({
+                        url: '/Students/EnrollSubject',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(enrollmentData),
+
+                        success: function (response) {
+                            if (response.success) {
+                                alert('Enrollment saved successfully!');
+
+                                const currentDate = new Date();
+                                const formattedDate = currentDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+                                const studentId = $('#studentId').val();
+
+                                // Use query string parameters instead of route parameters
+                                const url = `/Students/EnrollmentForm?studentId=${studentId}&enrollmentDate=${formattedDate}`;
+                                window.open(url, '_blank', 'width=800,height=600');
+                         
+                            } else {
+                                alert('Error: ' + response.message);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('AJAX Error:', error);
+                            console.error('Response:', xhr.responseText);
+                            alert('Error saving enrollment. Please check the console for details.');
+                        }
+                    });
                 });
 
                 // Add subject to table

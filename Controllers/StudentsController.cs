@@ -157,14 +157,89 @@ namespace StudentPortal.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EnrollSubject(SubjectEnrollmentViewModel model)
+        public async Task<IActionResult> EnrollSubject([FromBody] SubjectEnrollmentViewModel model)
         {
-            // Enrollment logic here
-            return Json(new { success = true });
+            if (model == null)
+            {
+                return Json(new { success = false, message = "Invalid data received." });
+            }
+            try
+            {
+                var student = await dbContext.Students.FindAsync(model.StudentId);
+                if (student == null)
+                {
+                    return Json(new { success = false, message = "Student not found." });
+                }
+
+                foreach (var subject in model.EnrolledSubjects)
+                {
+                    var enrollment = new SubjectEnrollment
+                    {
+                        StudentId = model.StudentId,
+                        EdpCode = subject.EdpCode,
+                        EncodedDate = model.EnrollmentDate,
+                        EncodedBy = model.EncodedBy
+                    };
+
+                    await dbContext.SubjectEnrollments.AddAsync(enrollment);
+                }
+
+                await dbContext.SaveChangesAsync();
+                return Json(new { success = true, message = "Enrollment saved successfully." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Error saving enrollment: {ex.Message}" });
+            }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EnrollmentForm(int studentId, DateTime enrollmentDate)
+        {
+            Console.WriteLine($"StudentId: {studentId}, EnrollmentDate: {enrollmentDate}");
+
+            var student = await dbContext.Students.FindAsync(studentId);
+            var enrollments = await dbContext.SubjectEnrollments
+                .Include(se => se.Schedule)
+                    .ThenInclude(s => s.Subject)
+                .Where(se => se.StudentId == studentId &&
+                            se.EnrollmentDate.Date == enrollmentDate.Date)
+                .ToListAsync();
+
+            if (student == null || !enrollments.Any())
+            {
+                return NotFound();
+            }
+
+            var viewModel = new SubjectEnrollmentViewModel
+            {
+                StudentId = student.Id,
+                StudentName = $"{student.FirstName} {student.MiddleName} {student.LastName}",
+                Course = student.Course,
+                Year = student.Year,
+                EnrollmentDate = enrollmentDate,
+                EnrolledSubjects = enrollments.Select(e => new EnrolledSubjectViewModel
+                {
+                    EdpCode = e.EdpCode,
+                    SubjectCode = e.Schedule.SubjCode,
+                    Description = e.Schedule.Subject.SubjectDescription,
+                    Units = e.Schedule.Subject.Units,
+                    StartTime = e.Schedule.StartTime,
+                    EndTime = e.Schedule.EndTime,
+                    Room = e.Schedule.Room,
+                    Section = e.Schedule.Section
+                }).ToList(),
+                TotalUnits = enrollments.Sum(e => e.Schedule.Subject.Units)
+            };
+
+         
+            return View("EnrollmentForm", viewModel);
+        }
+
+    }
     }
 
-}
+
 
     
     

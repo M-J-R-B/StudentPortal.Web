@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using StudentPortal.Web.Data;
 
@@ -28,6 +29,12 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "enrollment",
+    pattern: "Students/EnrollmentForm",
+    defaults: new { controller = "Students", action = "EnrollmentForm" });
+
 
 app.MapControllerRoute(
     name: "schedule",

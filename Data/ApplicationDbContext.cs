@@ -27,6 +27,18 @@ namespace StudentPortal.Web.Data
                 new UserAccount { Id = 1, Username = "user1", Password = "password1" },
                 new UserAccount { Id = 2, Username = "user2", Password = "password2" }
             );
+
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<SubjectEnrollment>()
+                .HasOne(se => se.Student)
+                .WithMany()
+                .HasForeignKey(se => se.StudentId);
+
+            modelBuilder.Entity<SubjectEnrollment>()
+                .HasOne(se => se.Schedule)
+                .WithMany()
+                .HasForeignKey(se => se.EdpCode);
         }
     }
     
