@@ -67,18 +67,19 @@ namespace StudentPortal.Web.Controllers
 
         // GET: Subject/Edit/{id}
         [HttpGet]
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(string id)
         {
-            var subject = await dbContext.Subjects.FindAsync(id);
+            var subject = await dbContext.Subjects
+        .AsNoTracking()
+        .FirstOrDefaultAsync(s => s.Subj_Code == id);
+
             if (subject == null)
             {
                 return NotFound();
             }
 
-            // Map the Subject entity to SubjectViewModel
             var viewModel = new SubjectViewModel
             {
-                Id = subject.Id,
                 Subj_Code = subject.Subj_Code,
                 SubjectDescription = subject.SubjectDescription,
                 Units = subject.Units,
@@ -87,7 +88,7 @@ namespace StudentPortal.Web.Controllers
                 Course_Code = subject.Course_Code,
                 CurriculumYear = subject.CurriculumYear,
                 SubjectRequisite = subject.SubjectRequisite,
-                IsPreRequisite = subject.IsPreRequisite // Load existing requisite
+                IsPreRequisite = subject.IsPreRequisite
             };
 
             return View(viewModel);
@@ -147,9 +148,9 @@ namespace StudentPortal.Web.Controllers
 
         // GET: Subject/Delete/{id}
         [HttpGet]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
-            var subject = await dbContext.Subjects.FindAsync(id);
+            var subject = await dbContext.Subjects.FirstOrDefaultAsync(s => s.Subj_Code == id);
             if (subject == null)
             {
                 return NotFound();
@@ -159,12 +160,12 @@ namespace StudentPortal.Web.Controllers
 
         // POST: Subject/Delete
         [HttpPost]
-        [ValidateAntiForgeryToken] // Optional: For security purposes
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var subject = await dbContext.Subjects
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == id);
+                .FirstOrDefaultAsync(x => x.Subj_Code == id);
 
             if (subject != null)
             {
